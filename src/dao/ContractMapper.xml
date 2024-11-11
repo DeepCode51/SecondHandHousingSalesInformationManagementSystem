@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.ContractMapper" >
+  <resultMap id="BaseResultMap" type="Pojo.Contract" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="sellerid" property="sellerid" jdbcType="VARCHAR" />
+    <result column="sellername" property="sellername" jdbcType="VARCHAR" />
+    <result column="selleridcard" property="selleridcard" jdbcType="VARCHAR" />
+     <result column="buyerid" property="buyerid" jdbcType="VARCHAR" />
+      <result column="buyername" property="buyername" jdbcType="VARCHAR" />
+    <result column="buyeridcard" property="buyeridcard" jdbcType="VARCHAR" />
+    <result column="agencyid" property="agencyid" jdbcType="VARCHAR" />
+     <result column="agencyname" property="agencyname" jdbcType="VARCHAR" />
+      <result column="houseid" property="houseid" jdbcType="VARCHAR" />
+    <result column="housename" property="housename" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+     <result column="note" property="note" jdbcType="VARCHAR" />
+     <result column="starttime" property="starttime" jdbcType="VARCHAR" />
+     <result column="endtime" property="endtime" jdbcType="VARCHAR" />
+     <result column="houseprice" property="houseprice" jdbcType="VARCHAR" />
+     <result column="paycount" property="paycount" jdbcType="VARCHAR" />
+     <result column="paytype" property="paytype" jdbcType="VARCHAR" />
+  </resultMap>
+ <select id="selectAllContract" resultMap="BaseResultMap">
+   select * from contract t 
+  </select>
+   <insert id="addcontract" parameterType="Pojo.Contract">
+	  insert into contract (sellerid,sellername,selleridcard,buyerid,buyername,buyeridcard,agencyid,agencyname,status,houseid,houselocation,starttime,endtime,note,houseprice,paycount,paytype) 
+	  values (#{sellerid},#{sellername},#{selleridcard},#{buyerid},#{buyername},#{buyeridcard},
+	  #{agencyid},#{agencyname},'0',#{houseid},#{houselocation},#{starttime},#{endtime},#{note},#{houseprice},#{paycount},#{paytype})
+	</insert>
+  <select id="selectAllContractByStatus" parameterType="String" resultMap="BaseResultMap">
+   select * from contract t where t.status = #{status}
+  </select>
+  <update id="updatecontractstatus" parameterType="Pojo.Contract">
+		update contract set status = #{status} 
+		where id=#{id}
+</update>
+<select id="seecontract" parameterType="String" resultMap="BaseResultMap">
+   select * from contract t where t.id = #{id}
+  </select>
+  <delete id="deletecontract" parameterType="String" >
+		delete from contract where id=#{id}
+	</delete>
+	
+	<select id="selectBuyerContractById" parameterType="String" resultMap="BaseResultMap">
+   select * from contract t where t.buyerid = #{buyerid}
+  </select>
+  <select id="selectSellerContractById"  parameterType="String" resultMap="BaseResultMap">
+   select * from contract t where t.sellerid = #{sellerid}
+  </select>
+</mapper>

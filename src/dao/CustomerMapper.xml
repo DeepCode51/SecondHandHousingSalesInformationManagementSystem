@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="dao.CustomerMapper" >
+  <resultMap id="BaseResultMap" type="Pojo.Customer" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="companyname" property="companyname" jdbcType="VARCHAR" />
+    <result column="idcardnumber" property="idcardnumber" jdbcType="VARCHAR" />
+     <result column="businesscode" property="businesscode" jdbcType="VARCHAR" />
+      <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="housetype" property="housetype" jdbcType="VARCHAR" />
+     <result column="acreage" property="acreage" jdbcType="VARCHAR" />
+      <result column="unitprice" property="unitprice" jdbcType="VARCHAR" />
+    <result column="totalhouseprice" property="totalhouseprice" jdbcType="VARCHAR" />
+    <result column="paymentmode" property="paymentmode" jdbcType="VARCHAR" />
+     <result column="type" property="type" jdbcType="VARCHAR" />
+     <result column="isvalid" property="isvalid" jdbcType="VARCHAR" />
+  </resultMap>
+ <select id="selectAllBuyer" resultMap="BaseResultMap">
+   select * from customer t where t.type = 'buyer'
+  </select>
+   <select id="selectAllSeller" resultMap="BaseResultMap">
+   select * from customer t where t.type = 'seller'
+  </select>
+  <select id="findtelephone" parameterType="String" resultType="Pojo.Customer">
+		select * from customer t where t.telephone = #{telephone}
+  </select>
+  <insert id="insertbuyer" parameterType="Pojo.Customer">
+	  insert into customer (name,companyname,idcardnumber,businesscode,telephone,
+	  location,housetype,acreage,unitprice,totalhouseprice,paymentmode,type,isvalid) 
+	  values (#{name},#{companyname},#{idcardnumber},#{businesscode},
+	  #{telephone},#{location},#{housetype},#{acreage},#{unitprice},#{totalhouseprice},#{paymentmode},'buyer','0')
+	</insert>
+	<insert id="insertseller" parameterType="Pojo.Customer">
+	  insert into customer (name,companyname,idcardnumber,businesscode,telephone,
+	  location,housetype,acreage,unitprice,totalhouseprice,paymentmode,type,isvalid) 
+	  values (#{name},#{companyname},#{idcardnumber},#{businesscode},
+	  #{telephone},#{location},#{housetype},#{acreage},#{unitprice},#{totalhouseprice},#{paymentmode},'seller','0')
+	</insert>
+	
+	<select id="selectAllNoValidBuyer" resultMap="BaseResultMap">
+   select * from customer t where t.type = 'buyer' and t.isvalid = '0'
+  </select>
+  
+	  <select id="selectAllNoValidSeller" resultMap="BaseResultMap">
+	   select * from customer t where t.type = 'seller' and t.isvalid = '0'
+	  </select>
+  	<update id="validbuyer" parameterType="Pojo.Customer">
+		update customer set isvalid = '1' 
+		where id=#{id}
+	</update>
+	<update id="novalidbuyer" parameterType="Pojo.Customer">
+			update customer set isvalid = '0' 
+			where id=#{id}
+	</update>
+	<insert id="addcustomer" parameterType="Pojo.User">
+		  insert into user (username,password,type) values (#{username},#{password},#{type})
+	</insert>
+	
+	<select id="findseller"  resultType="Pojo.Customer">
+		select * from customer t where abs(t.totalhouseprice - #{totalhouseprice}) <![CDATA[<=]]> 100000 
+		and t.type = 'seller'
+  </select>
+  <select id="findbuyer"  resultType="Pojo.Customer">
+		select * from customer t where abs(t.totalhouseprice - #{totalhouseprice}) <![CDATA[<=]]> 100000 
+		and t.type = 'buyer'
+  </select>
+  <delete id="deletecustomer" parameterType="String" >
+		delete from customer where id=#{id}
+	</delete>
+	 <select id="findcustomer"  parameterType="String" resultType="Pojo.Customer">
+		select * from customer t where id=#{id}
+  </select>
+  <update id="updatecustomer" parameterType="Pojo.Customer">
+			update customer set name=#{name},companyname=#{companyname},idcardnumber=#{idcardnumber},
+			businesscode=#{businesscode},telephone=#{telephone},location=#{location},
+			housetype=#{housetype},acreage=#{acreage},unitprice=#{unitprice},
+			 totalhouseprice=#{totalhouseprice},paymentmode=#{paymentmode}
+			where id=#{id}
+	</update>
+</mapper>
